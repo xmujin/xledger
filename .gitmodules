@@ -1,0 +1,3 @@
+[submodule "xxun-ui"]
+	path = xxun-ui
+	url = https://github.com/xmujin/xxun-ui.git
