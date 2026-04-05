@@ -11,16 +11,31 @@
 #include <QHeaderView>
 #include "addbilldialog.h"
 #include <QMenuBar>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRelationalTableModel>
+#include <QSqlRelationalDelegate>
+#include "addtagdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    connectDb();
+
     setFixedSize(1200, 800);
     setWindowTitle("记账系统");
 
     auto *menuBar = this->menuBar();
     QMenu *fileMenu = menuBar->addMenu("文件");
+    QMenu *settingMenu = menuBar->addMenu("设置");
     QMenu *aboutMenu = menuBar->addMenu("关于");
+
+    // 菜单项
+    QAction *actAdd = settingMenu->addAction("添加分类和标签");
+
+    
+
 
     QWidget *w = new QWidget;
     setCentralWidget(w);
@@ -34,21 +49,31 @@ MainWindow::MainWindow(QWidget *parent)
     
 
 
-    MyComboBox *balComboBox = new MyComboBox;
-    MyComboBox *dateComboBox = new MyComboBox;
+    balComboBox = new MyComboBox;
+    dateComboBox = new MyComboBox;
     balComboBox->setFixedSize(140, 50);
     dateComboBox->setFixedSize(140, 50);
     balComboBox->insertItems(0, QStringList{"全部", "收入", "支出"});
-    dateComboBox->insertItems(0, QStringList{"今日", "本周", "本月", "近三月", "全年"});
+    dateComboBox->insertItems(0, QStringList{"今日", "本周", "本月", "近三月", "全年", "自定义日期范围"});
 
-    QDateEdit *startDateEdit = new QDateEdit;
-    QLabel *lable = new QLabel("至");
-    QDateEdit *endDateEdit = new QDateEdit;
+    startDateEdit = new QDateEdit;
+    lable = new QLabel("至");
+    endDateEdit = new QDateEdit;
+    startDateEdit->setDate(QDate(QDate::currentDate().year(), 1, 1));
+    endDateEdit->setDate(QDate::currentDate());
+
+
+
     startDateEdit->setFixedSize(140, 50);
     endDateEdit->setFixedSize(140, 50);
 
     startDateEdit->setCalendarPopup(true);
     endDateEdit->setCalendarPopup(true);
+
+
+    startDateEdit->hide();
+    endDateEdit->hide();
+    lable->hide();
 
     hBoxLayout->addWidget(balComboBox);
     hBoxLayout->addWidget(dateComboBox);
@@ -59,15 +84,37 @@ MainWindow::MainWindow(QWidget *parent)
     hBoxLayout->addStretch();
     hBoxLayout->addWidget(addBtn);
 
+
+    // 设置表格
     QTableView *tableView = new QTableView;
-    QStandardItemModel *model = new QStandardItemModel(0, 7, this);
-    model->setHorizontalHeaderLabels({"消费时间", "类型", "金额", "分类", "支付方式", "标签", "备注"});
+    model = new QSqlRelationalTableModel;
+    model->setTable("bill"); 
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    // 设置外键关系
+    model->setRelation(4, QSqlRelation("category", "id", "name"));
+    model->setRelation(6, QSqlRelation("tag", "id", "name"));
+    model->setJoinMode(QSqlRelationalTableModel::LeftJoin);  // 关键
+
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("消费时间"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("类型"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("金额"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("分类"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("支付方式"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("标签"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("备注"));
     tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    QList<QStandardItem *> row;
-    row << new QStandardItem("2023-10-27") << new QStandardItem("收入") << new QStandardItem("100") << new QStandardItem("工资") << new QStandardItem("微信") << new QStandardItem("奖金") << new QStandardItem("无");
-    model->appendRow(row);
+
+    updateFilter();
+    model->select();
+
 
     tableView->setModel(model);
+    tableView->hideColumn(0); 
+    tableView->setItemDelegate(new QSqlRelationalDelegate(tableView));
+
+
+
+
     tableView->setFixedHeight(450);
 
     mainLayout->addStretch(2);
@@ -83,20 +130,213 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(addBtn, &QPushButton::clicked, this, [=]() {
             AddBillDialog abd(this);
-
-
-            abd.exec();
-            
-
+            if (abd.exec() == QDialog::Accepted) {
+                model->select(); // 只有用户点击添加并成功插入时才刷新
+            }
 
         });
+
+
+    // 连接下拉列表的过滤
+
+    connect(balComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
+    connect(dateComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
+    connect(startDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
+    connect(endDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
+
+
+    connect(actAdd, &QAction::triggered, this, [=]() {
+        AddTagDialog atd(this);
+        atd.exec();
+
+    });
+
+}
+
+void MainWindow::connectDb()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("bill.db");
+    if(!db.open())
+    {
+        qDebug() << "打开数据库失败: " << db.lastError();
+    }
+    else
+    {
+        QSqlQuery query;
+
+        // 启用外键约束
+        query.exec("PRAGMA FOREIGN_KEYS=ON;");  
+
+        // 创建标签表
+        query.exec(R"(
+            CREATE TABLE IF NOT EXISTS tag (
+                id INTEGER PRIMARY KEY NOT NULL,
+                name TEXT NOT NULL
+            );)");
+
+        // 创建分类表
+        query.exec(R"(
+            CREATE TABLE IF NOT EXISTS category (
+                id INTEGER PRIMARY KEY NOT NULL,
+                name TEXT NOT NULL
+            );)");
+        
+        // 创建账单表
+        query.exec(R"(
+            CREATE TABLE IF NOT EXISTS bill (
+                id INTEGER PRIMARY KEY NOT NULL,
+                date TEXT NOT NULL,
+                type TEXT NOT NULL,
+                amount REAL NOT NULL,
+                category_id INTEGER,
+                paytype TEXT NOT NULL,
+                tag_id INTEGER,
+                note TEXT,
+                FOREIGN KEY (category_id) REFERENCES category(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+                FOREIGN KEY (tag_id) REFERENCES tag(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            );)");
+        
+
+        qDebug() << "数据库和表创建成功";
+    }
+
+    // 插入种子数据
+    #if 0
+    QSqlQuery query;
+    query.prepare("INSERT INTO tag (name) "
+                  "VALUES (?)");
+    query.addBindValue("早餐");
+    query.exec();
+    query.addBindValue("中餐");
+    query.exec();
+    query.addBindValue("晚餐");
+    query.exec();
+    query.addBindValue("公交车");
+    query.exec();
+    query.addBindValue("出租车");
+    query.exec();
+
+    query.prepare("INSERT INTO category (name) "
+                  "VALUES (?)");
+    query.addBindValue("饮食");
+    query.exec();
+    query.addBindValue("出行");
+    query.exec();
+
+
+
+
+    query.prepare("INSERT INTO bill (date, type, amount, category_id, paytype,tag_id, note) "
+                  "VALUES (?, ?, ?, ?, ?, ?, ?)");
+    query.addBindValue("2026-04-05");
+    query.addBindValue("支出");
+    query.addBindValue(100);
+    query.addBindValue(1);
+    query.addBindValue("微信");    
+    query.addBindValue(1);
+    query.addBindValue("无");
+    query.exec();
+
+
+    #endif
+    
+
 
     
 
 
+}
+
+void MainWindow::updateFilter()
+{
+    if(dateComboBox->currentText() != "自定义日期范围")
+    {
+        startDateEdit->hide();
+        endDateEdit->hide();
+        lable->hide();
+    }
+    else 
+    {
+        startDateEdit->show();
+        endDateEdit->show();
+        lable->show();
+    }
+
+
+    QStringList filters;
+
+    // 全部  收入  支出的过滤
+    if (balComboBox->currentText() == "全部")
+    {
+        filters << QString("type IN ('收入', '支出')");
+    
+    }
+    else if (balComboBox->currentText() == "支出")
+    {
+        filters << QString("type = '支出'");
+    }
+    else if (balComboBox->currentText() == "收入")
+    {
+
+        filters << QString("type = '收入'");
+    }
+
+    // TODO 今日, 本周, 本月, 近三月, 全年的过滤
+    if (dateComboBox->currentText() == "今日")
+    {
+        filters << QString("date = date('now')");
+    
+    }
+    else if (dateComboBox->currentText() == "本周")
+    {
+        filters << QString("date >= date('now','weekday 0','-6 days')");
+    }
+    else if (dateComboBox->currentText() == "本月")
+    {
+        filters << QString("strftime('%Y-%m', date) = strftime('%Y-%m','now')");
+    }
+    else if (dateComboBox->currentText() == "近三月")
+    {
+        filters << QString("date >= date('now','-3 month')");
+    }
+    else if (dateComboBox->currentText() == "全年")
+    {
+        filters << QString("strftime('%Y',date) = strftime('%Y','now')");
+    }
+    else if (dateComboBox->currentText() == "自定义日期范围")
+    {
+        
+        filters << QString("date between '%1' and '%2'")
+        .arg(startDateEdit->date().toString("yyyy-MM-dd"))
+        .arg(endDateEdit->date().toString("yyyy-MM-dd"));
+
+        qDebug() << QString("date between '%1' and '%2'")
+        .arg(startDateEdit->date().toString("yyyy-MM-dd"))
+        .arg(endDateEdit->date().toString("yyyy-MM-dd"));
+    }
+    
+    
+
+
+    QString filterStr = filters.join(" AND ");
+    model->setFilter(filterStr);
+    model->select(); // 刷新数据    
 
 }
 
 MainWindow::~MainWindow()
 {
+
+    // FIXME 将model改为智能指针来释放
+    model->submitAll();
+    delete model; 
+
+    QSqlDatabase db = QSqlDatabase::database();
+    db.close();
+    QSqlDatabase::removeDatabase("QSQLITE");
 }
