@@ -12,7 +12,7 @@
 #include <QObject>
 #include <QWidget>
 
-class MyListView;
+class QListWidget;
 class MyButton;
 class QAbstractItemModel;
 class QLineEdit;
@@ -20,18 +20,23 @@ class AddTabWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AddTabWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+    enum TabType { Category, Tag };
+
+    explicit AddTabWidget(TabType t, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     ~AddTabWidget();
 
     void initUI();
 
     void setAddBtnText(const QString &text);
 
-    void setModel(QAbstractItemModel *model);
 
     void setupConnections();
 
     QString getLineEditText() const;
+
+
+    void addListWidgetItem(const QString&str);
 
 
 signals:
@@ -39,7 +44,8 @@ signals:
     void cancelBtnClicked();
 
 private:
-    MyListView *m_listView;
+    TabType m_type;
+    QListWidget *m_listWidget;
     MyButton *m_addBtn;
     MyButton *m_cancelBtn;
     QLineEdit *m_lineEdit;

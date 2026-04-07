@@ -2,6 +2,7 @@
 #include "mybutton.h"
 #include "mycombobox.h"
 #include <QHBoxLayout>
+#include <QComboBox>
 #include <QVBoxLayout>
 #include <QDateEdit>
 #include <qwidget.h>
@@ -17,140 +18,26 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlRelationalDelegate>
 #include "addtagdialog.h"
+#include <qsqlrelationaldelegate.h>
+#include "MySqlRelationalDelegate.h"
+#include "MySqlRelationalTableModel.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    initBase();
     connectDb();
+    createMenu();
+    createMainLayout();
+    createHBoxLayout();
+    createTableView();
+    setupConnections();
+}
 
+void MainWindow::initBase()
+{
     setFixedSize(1200, 800);
     setWindowTitle("记账系统");
-
-    auto *menuBar = this->menuBar();
-    QMenu *fileMenu = menuBar->addMenu("文件");
-    QMenu *settingMenu = menuBar->addMenu("设置");
-    QMenu *aboutMenu = menuBar->addMenu("关于");
-
-    // 菜单项
-    QAction *actAdd = settingMenu->addAction("添加分类和标签");
-
-    
-
-
-    QWidget *w = new QWidget;
-    setCentralWidget(w);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    QHBoxLayout *hBoxLayout = new QHBoxLayout;
-
-    MyButton *addBtn = new MyButton("添加账单", this);
-    addBtn->setFixedSize(230, 50);
-
-    
-
-
-    balComboBox = new MyComboBox;
-    dateComboBox = new MyComboBox;
-    balComboBox->setFixedSize(140, 50);
-    dateComboBox->setFixedSize(140, 50);
-    balComboBox->insertItems(0, QStringList{"全部", "收入", "支出"});
-    dateComboBox->insertItems(0, QStringList{"今日", "本周", "本月", "近三月", "全年", "自定义日期范围"});
-
-    startDateEdit = new QDateEdit;
-    lable = new QLabel("至");
-    endDateEdit = new QDateEdit;
-    startDateEdit->setDate(QDate(QDate::currentDate().year(), 1, 1));
-    endDateEdit->setDate(QDate::currentDate());
-
-
-
-    startDateEdit->setFixedSize(140, 50);
-    endDateEdit->setFixedSize(140, 50);
-
-    startDateEdit->setCalendarPopup(true);
-    endDateEdit->setCalendarPopup(true);
-
-
-    startDateEdit->hide();
-    endDateEdit->hide();
-    lable->hide();
-
-    hBoxLayout->addWidget(balComboBox);
-    hBoxLayout->addWidget(dateComboBox);
-    hBoxLayout->addStretch();
-    hBoxLayout->addWidget(startDateEdit);
-    hBoxLayout->addWidget(lable);
-    hBoxLayout->addWidget(endDateEdit);
-    hBoxLayout->addStretch();
-    hBoxLayout->addWidget(addBtn);
-
-
-    // 设置表格
-    QTableView *tableView = new QTableView;
-    model = new QSqlRelationalTableModel;
-    model->setTable("bill"); 
-    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    // 设置外键关系
-    model->setRelation(4, QSqlRelation("category", "id", "name"));
-    model->setRelation(6, QSqlRelation("tag", "id", "name"));
-    model->setJoinMode(QSqlRelationalTableModel::LeftJoin);  // 关键
-
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("消费时间"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("类型"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("金额"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("分类"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("支付方式"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("标签"));
-    model->setHeaderData(7, Qt::Horizontal, QObject::tr("备注"));
-    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    updateFilter();
-    model->select();
-
-
-    tableView->setModel(model);
-    tableView->hideColumn(0); 
-    tableView->setItemDelegate(new QSqlRelationalDelegate(tableView));
-
-
-
-
-    tableView->setFixedHeight(450);
-
-    mainLayout->addStretch(2);
-    mainLayout->addLayout(hBoxLayout);
-    mainLayout->addStretch(1);
-    mainLayout->addWidget(tableView);
-    mainLayout->addStretch(5);
-
-    mainLayout->setContentsMargins(80, 0, 80, 0);
-    w->setLayout(mainLayout);
-
-
-
-    connect(addBtn, &QPushButton::clicked, this, [=]() {
-            AddBillDialog abd(this);
-            if (abd.exec() == QDialog::Accepted) {
-                model->select(); // 只有用户点击添加并成功插入时才刷新
-            }
-
-        });
-
-
-    // 连接下拉列表的过滤
-
-    connect(balComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
-    connect(dateComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
-    connect(startDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
-    connect(endDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
-
-
-    connect(actAdd, &QAction::triggered, this, [=]() {
-        AddTagDialog atd(this);
-        atd.exec();
-
-    });
-
 }
 
 void MainWindow::connectDb()
@@ -252,6 +139,147 @@ void MainWindow::connectDb()
 
 }
 
+void MainWindow::createMenu()
+{
+    auto *menuBar = this->menuBar();
+    QMenu *fileMenu = menuBar->addMenu("文件");
+    QMenu *settingMenu = menuBar->addMenu("设置");
+    QMenu *aboutMenu = menuBar->addMenu("关于");
+
+    // 菜单项
+    QAction *actAdd = settingMenu->addAction("添加分类和标签");
+
+
+    connect(actAdd, &QAction::triggered, this, [=]() {
+        AddTagDialog atd(this);
+        atd.exec();
+    });
+
+}
+
+void MainWindow::createMainLayout()
+{
+    QWidget *w = new QWidget;
+    setCentralWidget(w);
+    QVBoxLayout *mainLayout = new QVBoxLayout(w);
+
+    // 添加水平布局和表格控件
+    hBoxLayout = new QHBoxLayout;
+    tableView = new QTableView;
+
+    mainLayout->addStretch(2);
+    mainLayout->addLayout(hBoxLayout);
+    mainLayout->addStretch(1);
+    mainLayout->addWidget(tableView);
+    mainLayout->addStretch(5);
+    mainLayout->setContentsMargins(80, 0, 80, 0);
+}
+
+void MainWindow::createHBoxLayout()
+{
+    addBtn = new MyButton("添加账单", this);
+    
+
+    balComboBox = new QComboBox;
+    dateComboBox = new MyComboBox;
+    startDateEdit = new QDateEdit;
+    lable = new QLabel("至");
+    endDateEdit = new QDateEdit;
+
+    // 尺寸设置
+    addBtn->setFixedSize(150, 30);
+    balComboBox->setFixedSize(140, 30);
+    dateComboBox->setFixedSize(140, 30);
+    startDateEdit->setFixedSize(140, 30);
+    endDateEdit->setFixedSize(140, 30);
+
+    // 组合框设置
+    balComboBox->insertItems(0, QStringList{"全部", "收入", "支出"});
+    dateComboBox->insertItems(0, QStringList{"今日", "本周", "本月", "近三月", "全年", "自定义日期范围"});
+
+
+
+    
+    // 日期选择框设置
+    startDateEdit->setDate(QDate(QDate::currentDate().year(), 1, 1));
+    endDateEdit->setDate(QDate::currentDate());
+    // 显示下拉日期选择框
+    startDateEdit->setCalendarPopup(true);
+    endDateEdit->setCalendarPopup(true);
+    startDateEdit->hide();
+    endDateEdit->hide();
+
+    // 标签隐藏
+    lable->hide();
+
+
+
+    // 水平布局设置
+    hBoxLayout->addWidget(balComboBox);
+    hBoxLayout->addWidget(dateComboBox);
+    hBoxLayout->addWidget(startDateEdit);
+    hBoxLayout->addWidget(lable);
+    hBoxLayout->addWidget(endDateEdit);
+    hBoxLayout->addStretch();
+    hBoxLayout->addWidget(addBtn);
+
+}
+
+void MainWindow::createTableView()
+{
+    tableView->setFixedHeight(450);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // model设置
+    model = new MySqlRelationalTableModel;
+    model->setTable("bill"); 
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+
+    // 设置外键关系
+    model->setRelation(4, QSqlRelation("category", "id", "name"));
+    model->setRelation(6, QSqlRelation("tag", "id", "name"));
+    model->setJoinMode(QSqlRelationalTableModel::LeftJoin);  // 关键
+    // 添加表格头
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("消费时间"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("类型"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("金额"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("分类"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("支付方式"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("标签"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("备注"));
+    
+    // 设置模型
+    tableView->setModel(model);
+    tableView->hideColumn(0); 
+    tableView->setItemDelegate(new MySqlRelationalDelegate(tableView));
+
+
+    
+
+    // 更新数据
+    updateFilter();
+    model->select();
+    
+}
+
+void MainWindow::setupConnections()
+{
+    connect(addBtn, &QPushButton::clicked, this, [=]() {
+            AddBillDialog abd(this);
+            if (abd.exec() == QDialog::Accepted) {
+                model->select(); // 只有用户点击添加并成功插入时才刷新
+            }
+
+        });
+
+    // 连接下拉列表的过滤
+    connect(balComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
+    connect(dateComboBox, QOverload<int>::of(&MyComboBox::currentIndexChanged), this, &MainWindow::updateFilter);
+    connect(startDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
+    connect(endDateEdit, &QDateEdit::dateChanged, this, &MainWindow::updateFilter);
+
+    
+}
+
 void MainWindow::updateFilter()
 {
     if(dateComboBox->currentText() != "自定义日期范围")
@@ -321,8 +349,6 @@ void MainWindow::updateFilter()
     }
     
     
-
-
     QString filterStr = filters.join(" AND ");
     model->setFilter(filterStr);
     model->select(); // 刷新数据    

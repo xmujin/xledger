@@ -1,0 +1,45 @@
+QComboBox {
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 1px 10px;
+}
+
+QComboBox:hover {
+    border-color: #266FFF;
+}
+
+
+
+QComboBox QAbstractItemView {
+    selection-background-color: #266FFF;
+    selection-color: white;
+}
+
+
+
+        
+/* 下拉小箭头的样式 */
+QComboBox::drop-down {
+    border: none;
+    
+}
+
+QComboBox:on { /* shift the text when the popup opens */
+}
+
+
+QComboBox::down-arrow {
+    image: url(:/assets/arrow-right.png);
+    width: 16px;
+}
+
+QComboBox::down-arrow:on {
+    image: url(:/assets/arrow-down.png);
+}
+
+
+QTableView {
+    selection-background-color: #266FFF;
+    selection-color: white;
+}
+

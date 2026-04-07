@@ -24,7 +24,6 @@ public:
 
 
     void initUI();
-    void setModel();
 
     void setupConnections();
 signals:

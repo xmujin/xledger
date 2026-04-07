@@ -5,8 +5,15 @@
 
 class QSqlRelationalTableModel;
 class MyComboBox;
+class QComboBox;
 class QDateEdit;
 class QLabel;
+class QHBoxLayout;
+class QTableView;
+class MyButton;
+class MySqlRelationalTableModel;
+
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -16,21 +23,31 @@ public:
 
 
 
+    void initBase();
     void connectDb();
+    void createMenu();
 
-    void updateFilter();
+    void createMainLayout();
+    void createHBoxLayout();
+    void createTableView();
 
+    void setupConnections();
 
     ~MainWindow();
+    
 
-
+private slots:
+    void updateFilter();
 
 private:
-    QSqlRelationalTableModel *model;
-    MyComboBox *balComboBox;
+    MySqlRelationalTableModel *model;
+    QComboBox *balComboBox;
     MyComboBox *dateComboBox;
     QDateEdit *startDateEdit;
     QDateEdit *endDateEdit;
     QLabel *lable;
+    QHBoxLayout *hBoxLayout;
+    QTableView *tableView;
+    MyButton *addBtn;
 
 };
