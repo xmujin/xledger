@@ -1,9 +1,6 @@
 #include <QApplication>
 #include "mainwindow.h"
-#include "mylistview.h"
-#include "addtagdialog.h"
 #include <qfile.h>
-#include "MyListWidgetItem.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -23,10 +20,6 @@ int main(int argc, char *argv[])
     
     MainWindow w;
     w.show();
-
-
-
-    
 
     return a.exec();
 }

@@ -56,7 +56,7 @@ void AddTabWidget::initUI()
         m_listWidget->setItemWidget(item, w);
 
         connect(w, &MyListWidgetItem::btnClicked, this, [=] {
-            // TODO 添加是否删除的消息框
+            // 添加是否删除的消息框
             QMessageBox msgBox(this);
             msgBox.setText(QString("是否要删除%1 %2?").arg(m_type == Category ? "分类" : "标签", name));
             msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);

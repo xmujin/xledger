@@ -314,7 +314,7 @@ void MainWindow::updateFilter()
         filters << QString("type = '收入'");
     }
 
-    // TODO 今日, 本周, 本月, 近三月, 全年的过滤
+    // 今日, 本周, 本月, 近三月, 全年的过滤
     if (dateComboBox->currentText() == "今日")
     {
         filters << QString("date = date('now')");

@@ -21,7 +21,7 @@ MyListWidgetItem::MyListWidgetItem(QWidget *parent, Qt::WindowFlags f)
 
     btn = new MyButton("删除");
     btn->setFixedSize(60, 30);
-    // TODO 设置按钮样式
+    //  设置按钮样式
 
     btn->setBgColor(QColor("#FF4D4D"));
     btn->setButtonColors(

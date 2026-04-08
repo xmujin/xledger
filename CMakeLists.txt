@@ -11,8 +11,10 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
 qt_standard_project_setup()
 
 
-file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp" "*.h" "*.qrc")
 
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ui)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/*.h" "*.qrc")
 qt_add_executable(XLedger
     ${SOURCES}
 )
