@@ -4,18 +4,31 @@ project(XLedger VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_AUTORCC ON) 
+set(CMAKE_AUTORCC ON) # qt_standard_project_setup()默认没有开启它
+
+
+# 设置ui文件搜索路径
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
+)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
 
 qt_standard_project_setup()
 
 
+<<<<<<< HEAD
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ui)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/*.h" "*.qrc")
+=======
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/view)
+file(GLOB SOURCES "src/model/*.cpp" "src/view/*.cpp" "src/presenter/*.cpp" "src/ui/*.ui")
+>>>>>>> 9facba1 (统一命名风格)
 qt_add_executable(XLedger
+    src/main.cpp
+    resources.qrc
     ${SOURCES}
 )
 
