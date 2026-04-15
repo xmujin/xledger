@@ -1,21 +1,27 @@
-#include "addbilldialog.h"
-#include <QFormLayout>
-#include "mycombobox.h"
-#include <QTextEdit>
-#include <QLineEdit>
-#include <QVBoxLayout>
-#include "mybutton.h"
-#include <QHBoxLayout>
-#include <QSqlQueryModel>
-#include <QSqlQuery>
-#include <QDate>
-#include <QStandardItemModel>
-#include <QStandardItem>
+#include "addbillview.h"
+#include "categorydto.h"
+#include "tagdto.h"
+#include "ui_addbillview.h"
+#include "billdto.h"
+#include <qdialog.h>
+#include <qpushbutton.h>
+#include "billdto.h"
+#include <QDateTime>
+#include <qtmetamacros.h>
+#include <qvariant.h>
 
-AddBillDialog::AddBillDialog(QWidget *parent, Qt::WindowFlags f)
+
+AddBillView::AddBillView(QWidget *parent, Qt::WindowFlags f)
     : QDialog{parent, f}
+    , ui{new Ui::AddBillView}
 {
 
+    ui->setupUi(this);
+
+    connect(ui->addBillBtn, &QPushButton::clicked, this, &AddBillView::onSubmit);
+    connect(ui->cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
+
+#if 0
     setFixedSize(520, 550);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -133,4 +139,48 @@ AddBillDialog::AddBillDialog(QWidget *parent, Qt::WindowFlags f)
 
                 this->accept(); // 关闭对话框
             });
+
+
+    #endif
+}
+
+
+
+void AddBillView::onSubmit()
+{
+    // 分类
+    int category = ui->categoryComboBox->currentData().toInt();
+    int tag = ui->tagComboBox->currentData().toInt();
+    
+    BillDto dto;
+    dto.date = QDate::currentDate().toString("yyyy-MM-dd");
+    dto.amount = ui->moneyLineEdit->text().toDouble();
+    dto.category_id = category;
+    dto.note = ui->notePlainTextEdit->toPlainText();
+    dto.type = ui->typeComboBox->currentText();
+    dto.paytype = ui->payTypeComboBox->currentText();
+    dto.tag_id = tag;
+
+    emit addBillClicked(dto);
+    this->accept();
+}
+
+void AddBillView::setCategory(QList<CategoryDto> categories)
+{
+    ui->categoryComboBox->addItem("无", -1);
+    for (auto &category : categories) 
+    {
+        ui->categoryComboBox->addItem(category.name, category.id);
+    }
+}
+
+
+void AddBillView::setTag(QList<TagDto> tags)
+{
+    ui->tagComboBox->addItem("无", -1);
+    for (auto &tag : tags) 
+    {
+        ui->tagComboBox->addItem(tag.name, tag.id);
+    }
+
 }

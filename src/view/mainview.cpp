@@ -1,48 +1,112 @@
-#include "mainwindow.h"
+#include "mainview.h"
 #include "mybutton.h"
 #include "mycombobox.h"
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QDateEdit>
+#include <qpushbutton.h>
+#include <qsqlrelationaltablemodel.h>
 #include <qwidget.h>
 #include <QLabel>
 #include <QTableView>
 #include <QStandardItemModel>
 #include <QHeaderView>
-#include "addbilldialog.h"
 #include <QMenuBar>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRelationalTableModel>
 #include <QSqlRelationalDelegate>
-#include "addtagdialog.h"
 #include <qsqlrelationaldelegate.h>
 #include "mysqlrelationaldelegate.h"
-#include "mysqlrelationaltablemodel.h"
-#include "ui_mainwindow.h"
+#include "ui_mainview.h"
+#include <QAbstractItemModel>
+#include "filterstate.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui{new Ui::MainWindow}
+MainView::MainView(QWidget *parent)
+    : QMainWindow{parent}
+    , ui{new Ui::MainView}
 {
-    initBase();
-    connectDb();
-    createMenu();
-    createMainLayout();
-    createHBoxLayout();
-    createTableView();
-    setupConnections();
+    ui->setupUi(this);
+    // 配置日期范围选择
+
+    ui->startDate->setDate(QDate::currentDate());
+    ui->endDate->setDate(QDate::currentDate());
+
+    // 隐藏控件
+    ui->startDate->hide();
+    ui->dateLabel->hide();
+    ui->endDate->hide();
+
+    connect(ui->addBillBtn, &MyButton::clicked, this, &MainView::addBillBtnClicked);
+    connect(ui->addcategorytag, &QAction::triggered, this, &MainView::addCategoryTagTriggered);
+
+
+    // 全部 收入 支出
+    connect(ui->billTypeComboBox, &MyComboBox::currentTextChanged, this, &MainView::filterChanged);
+
+    // 连接日期组合框(今日、本周等等)
+    connect(ui->dateComboBox, &MyComboBox::currentTextChanged, this, [this](const QString &text) {
+        if(text == "自定义日期范围")
+        {
+            ui->startDate->show();
+            ui->dateLabel->show();
+            ui->endDate->show();
+        }
+        else 
+        {
+            ui->startDate->hide();
+            ui->dateLabel->hide();
+            ui->endDate->hide();
+        }
+        emit filterChanged();
+    });
+
+
+    connect(ui->startDate, &QDateEdit::userDateChanged, this, &MainView::filterChanged);
+    connect(ui->endDate, &QDateEdit::userDateChanged, this, &MainView::filterChanged);
+    
+
 }
 
-void MainWindow::initBase()
+
+void MainView::setModel(QAbstractItemModel *model)
+{
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView->setModel(model);
+    ui->tableView->hideColumn(0); 
+    ui->tableView->setItemDelegate(new MySqlRelationalDelegate(ui->tableView));
+}
+
+FilterState MainView::getFilterState()
+{
+    FilterState fs;
+    fs.billtype = ui->billTypeComboBox->currentText();
+    fs.dateRange = ui->dateComboBox->currentText();
+    fs.start = ui->startDate->date();
+    fs.end = ui->endDate->date();
+    return fs;
+}
+
+#if 0
+
+
+// initBase();
+    // connectDb();
+    // createMenu();
+    // createMainLayout();
+    // createHBoxLayout();
+    // createTableView();
+    // setupConnections();
+
+void MainView::initBase()
 {
     setFixedSize(1200, 800);
     setWindowTitle("记账系统");
 }
 
-void MainWindow::connectDb()
+void MainView::connectDb()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("bill.db");
@@ -373,3 +437,4 @@ MainWindow::~MainWindow()
 
 
 }
+#endif
