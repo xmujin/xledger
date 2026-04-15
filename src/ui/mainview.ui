@@ -201,10 +201,16 @@
      <height>33</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
    <widget class="QMenu" name="file">
     <property name="title">
      <string>文件</string>
     </property>
+    <addaction name="actionexport"/>
    </widget>
    <widget class="QMenu" name="setting">
     <property name="title">
@@ -212,19 +218,53 @@
     </property>
     <addaction name="addcategorytag"/>
    </widget>
-   <widget class="QMenu" name="about">
-    <property name="title">
-     <string>关于</string>
+   <widget class="QMenu" name="help">
+    <property name="geometry">
+     <rect>
+      <x>341</x>
+      <y>162</y>
+      <width>142</width>
+      <height>88</height>
+     </rect>
     </property>
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionabout"/>
    </widget>
    <addaction name="file"/>
    <addaction name="setting"/>
-   <addaction name="about"/>
+   <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="addcategorytag">
    <property name="text">
     <string>添加分类和标签</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionexport">
+   <property name="text">
+    <string>导出到Excel</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionabout">
+   <property name="text">
+    <string>关于</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>

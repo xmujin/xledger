@@ -10,24 +10,21 @@ QComboBox:hover {
 
 
 
+/* 下拉菜单项选中项的背景颜色 */
 QComboBox QAbstractItemView {
     selection-background-color: #266FFF;
     selection-color: white;
 }
 
 
-
-        
 /* 下拉小箭头的样式 */
 QComboBox::drop-down {
     border: none;
     
 }
 
-QComboBox:on { /* shift the text when the popup opens */
-}
 
-
+/* 下拉箭头的图标设置 */
 QComboBox::down-arrow {
     image: url(:/assets/arrow-right.png);
     width: 16px;
@@ -38,8 +35,39 @@ QComboBox::down-arrow:on {
 }
 
 
+/* tableview选中项的背景颜色 */
 QTableView {
     selection-background-color: #266FFF;
     selection-color: white;
 }
 
+QMenuBar {
+
+}
+
+
+QMenuBar::item {
+    padding: 5px 10px;
+    background: transparent;
+    border-radius: 4px;
+}
+
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #266FFF;
+    color: white;
+}
+
+QMenuBar::item:pressed {
+    background: #266FFF;
+    color: white;
+}
+
+/* 弹出的下拉菜单的配置 */
+QMenu::item { /* when user selects item using mouse or keyboard */
+    padding: 7px 20px;
+}
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background: #266FFF;
+    color: white;
+}

@@ -5,7 +5,6 @@
 ![Qt](https://img.shields.io/badge/Qt-6.11-brightgreen.svg) ![CMake](https://img.shields.io/badge/CMake-3.16+-brightgreen.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 
-C:/Qt/6.11.0/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake
 
 ## 功能
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
-    <height>462</height>
+    <width>364</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -108,14 +108,38 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QPushButton" name="cancelBtn">
+      <widget class="MyButton" name="cancelBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="text">
         <string>取消</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="addBillBtn">
+      <widget class="MyButton" name="addBillBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="text">
         <string>添加账单</string>
        </property>
@@ -125,6 +149,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyButton</class>
+   <extends>QPushButton</extends>
+   <header>mybutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -18,6 +18,10 @@ AddCategoryTagView::AddCategoryTagView(QWidget *parent, Qt::WindowFlags f)
     , ui{new Ui::AddCategoryTagView}
 {
     ui->setupUi(this);
+    
+    ui->deleteCategoryBtn->setButtonColors(QColor("#DC3545"), QColor("#C82333"), QColor("#A01E28"));
+    ui->deleteTagBtn->setButtonColors(QColor("#DC3545"), QColor("#C82333"), QColor("#A01E28"));
+    
 
     m_categoryModel = new QStandardItemModel(this);
     ui->categoryListView->setModel(m_categoryModel);
@@ -25,12 +29,12 @@ AddCategoryTagView::AddCategoryTagView(QWidget *parent, Qt::WindowFlags f)
     ui->tagListView->setModel(m_tagModel);
 
     // 添加账单和标签的按钮触发
-    connect(ui->addCategoryBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->addCategoryBtn, &MyButton::clicked, this, [this]() {
         emit addCategoryRequest(ui->categoryLineEdit->text());
         ui->categoryLineEdit->clear();
     });
 
-    connect(ui->addTagBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->addTagBtn, &MyButton::clicked, this, [this]() {
         emit addTagRequest(ui->tagLineEdit->text());
         ui->tagLineEdit->clear();
     });
