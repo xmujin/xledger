@@ -1,4 +1,12 @@
-
+/**
+ * @file addbillpresenter.h
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:97 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #pragma once
 #include "billdto.h"
 #include <QObject>

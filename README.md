@@ -2,14 +2,10 @@
 
 > 一个基于 Qt 的桌面记账应用
 
-<<<<<<< HEAD
-![Qt](https://img.shields.io/badge/Qt-6.11-brightgreen.svg) ![CMake](https://img.shields.io/badge/CMake-3.16+-orange.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg)
-=======
 ![Qt](https://img.shields.io/badge/Qt-6.11-brightgreen.svg) ![CMake](https://img.shields.io/badge/CMake-3.16+-brightgreen.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/License-MIT-green.svg)
->>>>>>> 9facba1 (统一命名风格)
 
 
-
+C:/Qt/6.11.0/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake
 
 ## 功能
 

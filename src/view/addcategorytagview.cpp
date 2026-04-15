@@ -1,3 +1,12 @@
+/**
+ * @file addcategorytagview.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:36 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "addcategorytagview.h"
 #include "ui_addcategorytagview.h"
 #include <QStandardItemModel>

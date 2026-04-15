@@ -1,3 +1,12 @@
+/**
+ * @file mainpresenter.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:12 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "mainpresenter.h"
 #include "CategoryModel.h"
 #include "TagModel.h"
@@ -7,10 +16,9 @@
 #include "mainview.h"
 #include "billmodel.h"
 #include "addbillview.h"
-#include <qdialog.h>
 #include <QSqlRelationalTableModel>
-#include <qlogging.h>
 #include "filterstate.h"
+
 
 MainPresenter::MainPresenter(BillModel *model, MainView *view, QObject *parent)
     : QObject{parent}, m_model{model}, m_view{view}

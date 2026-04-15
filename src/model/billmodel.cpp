@@ -1,16 +1,23 @@
+/**
+ * @file billmodel.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:96 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "billmodel.h"
-#include <qobject.h>
-#include <QSqlRelationalTableModel>
 #include "billdto.h"
 #include <QSqlQuery>
-#include <qvariant.h>
 
 BillModel::BillModel(QObject *parent)
     : QObject{parent}
-    , m_model{new QSqlRelationalTableModel}
+    , m_model{new MySqlRelationalTableModel}
 {
     initModel();
 }
+
 
 
 void BillModel::initModel()
@@ -74,4 +81,9 @@ bool BillModel::addBill(const BillDto &dto)
         return false;
     }
     return true;
+}
+
+MySqlRelationalTableModel *BillModel::model() const
+{
+    return m_model;
 }

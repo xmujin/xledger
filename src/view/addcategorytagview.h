@@ -1,5 +1,13 @@
+/**
+ * @file addcategorytagview.h
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:28 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #pragma once
-
 #include <QDialog>
 #include "categorydto.h"
 #include "tagdto.h"

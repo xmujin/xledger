@@ -1,13 +1,22 @@
+/**
+ * @file main.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:70 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include <QApplication>
-#include "database/DatabaseManager.h"
+#include "databasemanager.h"
 #include "mainview.h"
-#include <qfile.h>
-#include <QSqlRelationalTableModel>
-#include <qlogging.h>
-#include <qsqlrelationaltablemodel.h>
+#include <QFile>
+#include <QDebug>
 #include "mainpresenter.h"
 #include "billmodel.h"
 #include <QDebug>
+
+
 
 
 int main(int argc, char *argv[])
@@ -23,7 +32,6 @@ int main(int argc, char *argv[])
     }
     QTextStream out(&data);
     a.setStyleSheet(out.readAll());
-
     // 数据库建表的初始化
     if(!DatabaseManager::init())
     {

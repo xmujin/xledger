@@ -1,3 +1,12 @@
+/**
+ * @file tagmodel.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:43 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "TagModel.h"
 #include <QSqlQuery>
 #include <qcontainerfwd.h>

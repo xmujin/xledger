@@ -1,3 +1,12 @@
+/**
+ * @file categorymodel.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:82 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "CategoryModel.h"
 #include "dtos/categorydto.h"
 #include <QSqlQuery>

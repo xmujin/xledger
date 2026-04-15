@@ -1,3 +1,12 @@
+/**
+ * @file addbillpresenter.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:22 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "AddBillPresenter.h"
 #include "addbillview.h"
 #include <qlogging.h>

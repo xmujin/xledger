@@ -1,8 +1,16 @@
+/**
+ * @file databasemanager.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 19:04:01 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "DatabaseManager.h"
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-
 bool DatabaseManager::init()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");

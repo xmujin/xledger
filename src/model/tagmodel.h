@@ -1,5 +1,13 @@
+/**
+ * @file tagmodel.h
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:91 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #pragma once
-
 #include "tagdto.h"
 #include <QObject>
 

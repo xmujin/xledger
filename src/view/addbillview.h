@@ -1,8 +1,16 @@
+/**
+ * @file addbillview.h
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:18 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #pragma once
-
 #include <QObject>
 #include <QDialog>
-#include <qcontainerfwd.h>
+#include <QList>
 #include "billdto.h"
 
 

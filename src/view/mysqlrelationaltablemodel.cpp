@@ -1,3 +1,13 @@
+/**
+ * @file mysqlrelationaltablemodel.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:86 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
+
 #include "mysqlrelationaltablemodel.h"
 
 

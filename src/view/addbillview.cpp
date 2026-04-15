@@ -1,3 +1,12 @@
+/**
+ * @file addbillview.cpp
+ * @author xiangxun
+ * @brief 
+ * @date 2026-04-15 20:04:72 
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include "addbillview.h"
 #include "categorydto.h"
 #include "tagdto.h"
