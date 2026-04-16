@@ -26,12 +26,12 @@ QComboBox::drop-down {
 
 /* 下拉箭头的图标设置 */
 QComboBox::down-arrow {
-    image: url(:/assets/arrow-right.png);
+    image: url(:/resources/arrow-right.png);
     width: 16px;
 }
 
 QComboBox::down-arrow:on {
-    image: url(:/assets/arrow-down.png);
+    image: url(:/resources/arrow-down.png);
 }
 
 

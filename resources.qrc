@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets/arrow-down.png</file>
-        <file>assets/arrow-right.png</file>
-        <file>assets/style.qss</file>
+        <file>resources/arrow-down.png</file>
+        <file>resources/arrow-right.png</file>
+        <file>resources/style.qss</file>
+        <file>resources/favicon.ico</file>
     </qresource>
 </RCC>

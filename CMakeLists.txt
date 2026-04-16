@@ -12,6 +12,11 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
 
+# 设置安装前缀
+set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/dist")
+
+set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/resources/xledger.rc")
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Test)
 qt_standard_project_setup()
 
@@ -37,6 +42,7 @@ qt_add_executable(XLedger
     src/view/mainview
     resources.qrc
     ${SOURCES}
+    ${app_icon_resource_windows}
 )
 
 add_subdirectory(xxun-ui)
@@ -52,7 +58,7 @@ target_include_directories(XLedger
 target_link_libraries(XLedger PRIVATE Qt6::Widgets Qt6::Sql Qt6::Test xxun-ui)
 
 set_target_properties(XLedger PROPERTIES
-    WIN32_EXECUTABLE FALSE
+    WIN32_EXECUTABLE TRUE
 )
 
 include(GNUInstallDirs)

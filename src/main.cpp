@@ -23,11 +23,14 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setStyle("fusion");
-    QFile data(":/assets/style.qss");
+    QApplication::setWindowIcon(QIcon(":/resources/favicon.ico"));
+
+
+    QFile data(":/resources/style.qss");
 
     if(!data.open(QFile::ReadOnly))
     {
-        qWarning() << "打不开";
+        qWarning() << "打不开啊";
         return -1;
     }
     QTextStream out(&data);

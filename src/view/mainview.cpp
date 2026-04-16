@@ -11,14 +11,15 @@
 #include "filterstate.h"
 #include "mysqlrelationaldelegate.h"
 #include "ui_mainview.h"
+#include <QMessageBox>
 
 MainView::MainView(QWidget *parent)
     : QMainWindow{parent}
     , ui{new Ui::MainView}
 {
     ui->setupUi(this);
-    // 配置日期范围选择
 
+    // 配置日期范围选择
     ui->startDate->setDate(QDate::currentDate());
     ui->endDate->setDate(QDate::currentDate());
 
@@ -29,6 +30,22 @@ MainView::MainView(QWidget *parent)
 
     connect(ui->addBillBtn, &MyButton::clicked, this, &MainView::addBillBtnClicked);
     connect(ui->addcategorytag, &QAction::triggered, this, &MainView::addCategoryTagTriggered);
+
+    // 连接关于
+    connect(ui->actionabout, &QAction::triggered, this, [this] {
+ 
+
+        QMessageBox msgBox(this);
+        msgBox.setText("<div>"
+                    "<h2 style='color:#3498db;'>XLedger</h2>"
+                    "<p style='color:#2ecc71;'>该版本构建于2026年4月，是一款记账软件</p>"
+                    "<p style='color:#2ecc71;'>版本: 1.0</p>"
+                    "<p style='color:#7f8c8d;'>作者: 向洵</p>"
+                    "<p>作者的github地址: <a href='https://github.com/xmujin'>xmujin</a></p>"
+                    "</div>");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
+    });
 
 
     // 全部 收入 支出
