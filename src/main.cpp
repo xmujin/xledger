@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     QApplication::setStyle("fusion");
     QApplication::setWindowIcon(QIcon(":/resources/favicon.ico"));
 
-
     QFile data(":/resources/style.qss");
 
     if(!data.open(QFile::ReadOnly))

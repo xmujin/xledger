@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(XLedger VERSION 0.1 LANGUAGES CXX)
 
+include(qt.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON) # qt_standard_project_setup()默认没有开启它
@@ -17,7 +18,13 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/dist")
 
 set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/resources/xledger.rc")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Test)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR}
+    COMPONENTS
+        Widgets
+        Sql
+        Test
+)
 qt_standard_project_setup()
 
 
@@ -55,7 +62,7 @@ target_include_directories(XLedger
     ${CMAKE_CURRENT_SOURCE_DIR}/xxun-ui
 )
 
-target_link_libraries(XLedger PRIVATE Qt6::Widgets Qt6::Sql Qt6::Test xxun-ui)
+target_link_libraries(XLedger PRIVATE Qt::Widgets Qt::Sql Qt::Test xxun-ui)
 
 set_target_properties(XLedger PROPERTIES
     WIN32_EXECUTABLE TRUE
