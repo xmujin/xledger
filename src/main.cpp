@@ -14,9 +14,8 @@
 #include <QDebug>
 #include "mainpresenter.h"
 #include "billmodel.h"
-#include <QDebug>
-
-
+#include "mysqlrelationaltablemodel.h"
+#include "addcategorytagview.h"
 
 
 int main(int argc, char *argv[])
@@ -29,7 +28,7 @@ int main(int argc, char *argv[])
 
     if(!data.open(QFile::ReadOnly))
     {
-        qWarning() << "打不开啊";
+        qWarning() << "打不开啊sdfsdf";
         return -1;
     }
     QTextStream out(&data);
@@ -48,8 +47,10 @@ int main(int argc, char *argv[])
     MainView w;
     BillModel tb;
     MainPresenter mp(&tb, &w);
-
+    QObject::connect(&w, &MainView::addBillBtnClicked, &mp, &MainPresenter::onAddBillBtnClicked);
+    QObject::connect(&w, &MainView::addCategoryTagTriggered, &mp, &MainPresenter::onAddCategoryTagTriggered);
+    QObject::connect(&w, &MainView::filterChanged, &mp, &MainPresenter::applyFilter);
     w.show();
-
     return a.exec();
 }
+

@@ -12,29 +12,30 @@
 #include <QDialog>
 #include <QList>
 #include "billdto.h"
-
+#include "addbillview.h"
+#include "iaddview.h"
 
 namespace Ui {
     class AddBillView;
 }
-
 struct BillDto;
 struct TagDto;
 struct CategoryDto;
-class AddBillView: public QDialog
+class AddBillView : public QDialog, public IAddView
 {
     Q_OBJECT
 
 public:
     explicit AddBillView(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
-    void setCategory(QList<CategoryDto> categories);
-    void setTag(QList<TagDto> tags);
+    void setCategory(QList<CategoryDto> categories) override;
+    void setTag(QList<TagDto> tags) override;
 
-signals:
-    void addBillClicked(BillDto billDto);
 public slots:
     void onSubmit();
+
+signals:
+    void addBillClicked(BillDto dto);
 private:
     Ui::AddBillView *ui;   
 };

@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 
 
 
-qt_add_executable(mytest tst_billmodel.cpp tst_dsb.cpp)
+qt_add_executable(mytest tst_billmodel.cpp)
 add_test(NAME mytest COMMAND mytest)
 
-target_link_libraries(mytest PRIVATE Qt6::Test Qt6::Core)
+target_link_libraries(mytest PRIVATE Qt6::Test Qt6::Core xledger_core)

@@ -12,24 +12,26 @@
 #include <QDebug>
 
 
-class MainView;
+class IMainView;
 class BillModel;
+class AddCategoryTagView;
 class MainPresenter : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MainPresenter(BillModel *model, MainView *view, QObject *parent = nullptr);
+    explicit MainPresenter(BillModel *model, IMainView* view, QObject *parent = nullptr);
 
 
     void initModel();
 
-private slots:
+public slots:
     void onAddBillBtnClicked();
     void onAddCategoryTagTriggered();
     void applyFilter();
 
 private:
-    MainView *m_view;
+    IMainView *m_view;
+	AddCategoryTagView* m_addCategoryTagView;
     BillModel *m_model;
 };

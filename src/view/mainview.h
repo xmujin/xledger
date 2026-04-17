@@ -10,28 +10,30 @@
 #pragma once
 #include <QMainWindow>
 #include <QObject>
+#include "mainview.h"
+#include "imainview.h"
 
 namespace Ui {
     class MainView;
 }
 class QAbstractItemModel;
 struct FilterState;
-class MainView : public QMainWindow
+class MainView : public QMainWindow, public IMainView
 {
     Q_OBJECT
 
 public:
     explicit MainView(QWidget *parent = nullptr);
 
-    void setModel(QAbstractItemModel *model);
-    FilterState getFilterState();
-
-private:
-    Ui::MainView *ui;
-
+    void setModel(QAbstractItemModel *model) override;
+    FilterState getFilterState() override;
+    int showAddCategoryTagWindow() override;
+    int showAddBillWindow() override;
 
 signals:
     void addBillBtnClicked();
     void addCategoryTagTriggered();
     void filterChanged();
+private:
+    Ui::MainView *ui;
 };

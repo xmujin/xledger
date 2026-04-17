@@ -10,10 +10,11 @@
 #include "billmodel.h"
 #include "billdto.h"
 #include <QSqlQuery>
+#include <QSqlRelationalTableModel>
 
-BillModel::BillModel(QObject *parent)
+BillModel::BillModel( QObject* parent)
     : QObject{parent}
-    , m_model{new MySqlRelationalTableModel}
+    , m_model{ new QSqlRelationalTableModel }
 {
     initModel();
 }
@@ -83,7 +84,7 @@ bool BillModel::addBill(const BillDto &dto)
     return true;
 }
 
-MySqlRelationalTableModel *BillModel::model() const
+QAbstractItemModel* BillModel::model() const
 {
     return m_model;
 }

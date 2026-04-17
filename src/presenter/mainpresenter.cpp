@@ -12,22 +12,16 @@
 #include "TagModel.h"
 #include "addbillpresenter.h"
 #include "addcategorytagpresenter.h"
-#include "addcategorytagview.h"
-#include "mainview.h"
 #include "billmodel.h"
-#include "addbillview.h"
-#include <QSqlRelationalTableModel>
 #include "filterstate.h"
+#include "imainview.h"
+#include <QDialog>
 
 
-MainPresenter::MainPresenter(BillModel *model, MainView *view, QObject *parent)
-    : QObject{parent}, m_model{model}, m_view{view}
+MainPresenter::MainPresenter(BillModel *model, IMainView *view, QObject* parent)
+    : QObject{ parent }, m_model{ model }, m_view{ view }
 {
     initModel();
-
-    connect(m_view, &MainView::addBillBtnClicked, this, &MainPresenter::onAddBillBtnClicked);
-    connect(m_view, &MainView::addCategoryTagTriggered, this, &MainPresenter::onAddCategoryTagTriggered);
-    connect(m_view, &MainView::filterChanged, this, &MainPresenter::applyFilter);
 
 }
 
@@ -41,29 +35,18 @@ void MainPresenter::initModel()
 }
 
 void MainPresenter::onAddBillBtnClicked() {
-    TagModel tagModel;
-    BillModel billModel;
-    CategoryModel categoryModel;
-    AddBillView view{m_view};
-    AddBillPresenter presenter(&billModel, &categoryModel, &tagModel, &view);
-    if(view.exec() == QDialog::Accepted)
+	if (m_view->showAddBillWindow() == QDialog::Accepted)
     {
         // 刷新数据
         m_model->loadData();
     }
-
 }
 
 void MainPresenter::onAddCategoryTagTriggered()
 {
-    TagModel tagModel;
-    CategoryModel categoryModel;
-    AddCategoryTagView view{m_view};
-    AddCategoryTagPresenter presenter(&categoryModel, &tagModel, &view);
-    if(view.exec() == QDialog::Accepted)
+    if (m_view->showAddCategoryTagWindow() == QDialog::Accepted)
     {
     }
-    
 }
 
 void MainPresenter::applyFilter()

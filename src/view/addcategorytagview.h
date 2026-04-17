@@ -11,6 +11,8 @@
 #include <QDialog>
 #include "categorydto.h"
 #include "tagdto.h"
+#include "addcategorytagview.h"
+#include "iaddview.h"
 
 namespace Ui {
     class AddCategoryTagView;
@@ -19,7 +21,7 @@ namespace Ui {
 struct CategoryDto;
 struct TagDto;
 class QStandardItemModel;
-class AddCategoryTagView: public QDialog
+class AddCategoryTagView: public QDialog, public IAddView
 {
     Q_OBJECT
 
@@ -27,8 +29,8 @@ public:
     explicit AddCategoryTagView(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
 
-    void setCategory(QList<CategoryDto> categories);
-    void setTag(QList<TagDto> tags);
+    void setCategory(QList<CategoryDto> categories) override;
+    void setTag(QList<TagDto> tags) override;
 
 signals:
     void addCategoryRequest(const QString &category);

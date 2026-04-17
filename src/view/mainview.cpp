@@ -11,7 +11,14 @@
 #include "filterstate.h"
 #include "mysqlrelationaldelegate.h"
 #include "ui_mainview.h"
+#include <tagmodel.h>
+#include <categorymodel.h>
+#include <addcategorytagview.h>
+#include <addcategorytagpresenter.h>
+#include <billmodel.h>
+#include <addbillpresenter.h>
 #include <QMessageBox>
+#include "addbillview.h"
 
 MainView::MainView(QWidget *parent)
     : QMainWindow{parent}
@@ -29,7 +36,9 @@ MainView::MainView(QWidget *parent)
     ui->endDate->hide();
 
     connect(ui->addBillBtn, &MyButton::clicked, this, &MainView::addBillBtnClicked);
-    connect(ui->addcategorytag, &QAction::triggered, this, &MainView::addCategoryTagTriggered);
+    connect(ui->addcategorytag, &QAction::triggered, this, [this] {
+        emit addCategoryTagTriggered();
+    });
 
     // 连接关于
     connect(ui->actionabout, &QAction::triggered, this, [this] {
@@ -92,4 +101,34 @@ FilterState MainView::getFilterState()
     fs.start = ui->startDate->date();
     fs.end = ui->endDate->date();
     return fs;
+}
+
+
+int MainView::showAddCategoryTagWindow()
+{
+    TagModel tagModel;
+    CategoryModel categoryModel;
+    AddCategoryTagView view{ this };
+    AddCategoryTagPresenter presenter(&categoryModel, &tagModel, &view);
+    connect(&view, &AddCategoryTagView::addCategoryRequest, &presenter, &AddCategoryTagPresenter::onAddCategoryRequest);
+    connect(&view, &AddCategoryTagView::addTagRequest, &presenter, &AddCategoryTagPresenter::onAddTagRequest);
+    connect(&view, &AddCategoryTagView::updateCategoryRequest, &presenter, &AddCategoryTagPresenter::onUpdateCategoryRequest);
+    connect(&view, &AddCategoryTagView::updateTagRequest, &presenter, &AddCategoryTagPresenter::onUpdateTagRequest);
+    // 删除选中的标签和分类
+    connect(&view, &AddCategoryTagView::deleteCategoryRequest, &presenter, &AddCategoryTagPresenter::onDeleteCategoryRequest);
+    connect(&view, &AddCategoryTagView::deleteTagRequest, &presenter, &AddCategoryTagPresenter::onDeleteTagRequest);
+    
+    return view.exec();
+}
+
+int MainView::showAddBillWindow()
+{
+    TagModel tagModel;
+    BillModel billModel;
+    CategoryModel categoryModel;
+    AddBillView view{ this };
+    AddBillPresenter presenter(&billModel, &categoryModel, &tagModel, &view);
+    connect(&view, &AddBillView::addBillClicked, &presenter, &AddBillPresenter::onSubmitRequest);
+
+    return view.exec();
 }

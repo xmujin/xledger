@@ -1,17 +1,39 @@
 #include <QTest>
+#include "databasemanager.h"
+#include "billmodel.h"
 
-class TestQString: public QObject
+
+
+
+class TestBillModel: public QObject
 {
     Q_OBJECT
 private slots:
-    void toUpper();
+    void initTestCase();
+    void cleanupTestCase();
+    void addBill();
 };
 
-void TestQString::toUpper()
+
+void TestBillModel::initTestCase()
 {
-    QString str = "Hello";
-    QVERIFY(str.toUpper() == "HELLO");
+    DatabaseManager::init();
+	
 }
 
-// QTEST_MAIN(TestQString)
+void TestBillModel::cleanupTestCase()
+{
+    
+}
+
+void TestBillModel::addBill()
+{
+    BillModel model(this);
+
+    QVERIFY(true);
+
+}
+
+
+QTEST_MAIN(TestBillModel)
 #include "tst_billmodel.moc"

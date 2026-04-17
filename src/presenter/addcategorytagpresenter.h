@@ -12,19 +12,28 @@
 
 class CategoryModel;
 class TagModel;
-class AddCategoryTagView;
+class IAddView;
 class AddCategoryTagPresenter: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AddCategoryTagPresenter(CategoryModel *m_categoryModel, TagModel *m_tagModel, AddCategoryTagView *m_view, QObject *parent = nullptr);
+    explicit AddCategoryTagPresenter(CategoryModel *m_categoryModel, TagModel *m_tagModel, IAddView *m_view, QObject *parent = nullptr);
 
-signals:
+
+
+
+public slots:
+    void onAddCategoryRequest(const QString& category);
+    void onAddTagRequest(const QString& tag);
+    void onUpdateCategoryRequest(int id, const QString& name);
+    void onUpdateTagRequest(int id, const QString& name);
+    void onDeleteCategoryRequest(int id);
+    void onDeleteTagRequest(int id);
 
 
 private:
     CategoryModel *m_categoryModel;
     TagModel *m_tagModel;
-    AddCategoryTagView *m_view;
+    IAddView *m_view;
 };

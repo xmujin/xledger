@@ -1,8 +1,10 @@
 #pragma once
 #include <QObject>
-#include "mysqlrelationaltablemodel.h"
+
 
 struct BillDto;
+class QSqlRelationalTableModel;
+class QAbstractItemModel;
 class BillModel : public QObject
 {
 public:
@@ -38,9 +40,9 @@ public:
      * @brief 初始化QSqlRelationalTableModel
      * @return MySqlRelationalTableModel* 
      */
-    MySqlRelationalTableModel* model() const;
+    QAbstractItemModel* model() const;
 
 private:
-    MySqlRelationalTableModel *m_model;
+    QSqlRelationalTableModel* m_model;
 
 };
