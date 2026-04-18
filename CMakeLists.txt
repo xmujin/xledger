@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+
+
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
@@ -47,7 +49,8 @@ target_include_directories(xledger_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/model/dtos
     ${CMAKE_CURRENT_SOURCE_DIR}/src/presenter
     ${CMAKE_CURRENT_SOURCE_DIR}/src/database
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/interface
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/interface/view
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/interface/model
 )
 
 add_subdirectory(xxun-ui)

@@ -11,6 +11,8 @@
 #include "billdto.h"
 #include <QSqlQuery>
 #include <QSqlRelationalTableModel>
+#include <QSqlError>
+
 
 BillModel::BillModel( QObject* parent)
     : QObject{parent}
@@ -79,6 +81,7 @@ bool BillModel::addBill(const BillDto &dto)
     query.addBindValue(dto.note);
     if(!query.exec())
     {
+        m_lastError = query.lastError().text();
         return false;
     }
     return true;

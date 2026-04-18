@@ -8,12 +8,12 @@
  * 
  */
 #include "addcategorytagpresenter.h"
-#include "categorymodel.h"
-#include "tagmodel.h"
+#include "icategorymodel.h"
+#include "itagmodel.h"
 #include "iaddview.h"
 #include <QObject>
 
-AddCategoryTagPresenter::AddCategoryTagPresenter(CategoryModel *categoryModel, TagModel *tagModel, IAddView *view, QObject *parent)
+AddCategoryTagPresenter::AddCategoryTagPresenter(ICategoryModel *categoryModel, ITagModel *tagModel, IAddView *view, QObject *parent)
     : m_categoryModel{categoryModel}
     , m_tagModel{tagModel}
     , m_view{view}
@@ -26,6 +26,12 @@ AddCategoryTagPresenter::AddCategoryTagPresenter(CategoryModel *categoryModel, T
 
 void AddCategoryTagPresenter::onAddCategoryRequest(const QString& category)
 {
+    if (m_categoryModel->isExist(category))
+    {
+        m_view->showErrorMessage("分类已存在");
+		return;
+    }
+
     m_categoryModel->addCategory(category);
     m_view->setCategory(m_categoryModel->getCategories());
 }
@@ -33,6 +39,11 @@ void AddCategoryTagPresenter::onAddCategoryRequest(const QString& category)
 
 void AddCategoryTagPresenter::onAddTagRequest(const QString& tag)
 {
+    if (m_tagModel->isExist(tag))
+    {
+        m_view->showErrorMessage("标签已存在");
+        return;
+    }
     m_tagModel->addTag(tag);
     m_view->setTag(m_tagModel->getTags());
 }

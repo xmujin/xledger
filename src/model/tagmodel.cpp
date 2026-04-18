@@ -1,3 +1,4 @@
+#include "tagmodel.h"
 /**
  * @file tagmodel.cpp
  * @author xiangxun
@@ -59,4 +60,15 @@ bool TagModel::deleteTag(int id)
     query.addBindValue(id);
     query.exec();
     return true;
+}
+
+bool TagModel::isExist(const QString& tag)
+{
+    QSqlQuery query;
+	query.exec(QString("SELECT id FROM tag WHERE name = '%1'").arg(tag));
+    if (query.next())
+    {
+        return true;
+	}
+    return false;
 }

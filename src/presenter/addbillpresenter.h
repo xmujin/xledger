@@ -12,16 +12,16 @@
 #include <QObject>
 
 
-class CategoryModel;
-class TagModel;
-class BillModel;
+class ICategoryModel;
+class ITagModel;
+class IBillModel;
 class IAddView;
 class AddBillPresenter: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AddBillPresenter(BillModel *m_billModel, CategoryModel *categoryModel, TagModel *tagModel, IAddView *addBillView, QObject *parent = nullptr);
+    explicit AddBillPresenter(IBillModel *m_billModel, ICategoryModel *categoryModel, ITagModel *tagModel, IAddView *addBillView, QObject *parent = nullptr);
 
 signals:
 
@@ -31,7 +31,7 @@ public slots:
 
 private:
     IAddView *m_view;
-    BillModel *m_billModel;
-    CategoryModel *m_categoryModel;
-    TagModel *m_tagModel;
+    IBillModel *m_billModel;
+    ICategoryModel *m_categoryModel;
+    ITagModel *m_tagModel;
 };

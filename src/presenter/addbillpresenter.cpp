@@ -9,14 +9,14 @@
  */
 #include "AddBillPresenter.h"
 #include <qlogging.h>
-#include "billmodel.h"
-#include "categorymodel.h"
-#include "tagmodel.h"
+#include "ibillmodel.h"
+#include "icategorymodel.h"
+#include "itagmodel.h"
 #include "iaddview.h"
 
 
 
-AddBillPresenter::AddBillPresenter(BillModel *billModel, CategoryModel *categoryModel, TagModel *tagModel, IAddView *addBillView, QObject *parent)
+AddBillPresenter::AddBillPresenter(IBillModel *billModel, ICategoryModel *categoryModel, ITagModel *tagModel, IAddView *addBillView, QObject *parent)
     : QObject{parent}
     , m_billModel{billModel}
     , m_categoryModel{categoryModel}
@@ -30,6 +30,16 @@ AddBillPresenter::AddBillPresenter(BillModel *billModel, CategoryModel *category
 
 void AddBillPresenter::onSubmitRequest(BillDto dto)
 {
+
+
     // TODO 提交添加账单的逻辑
-    m_billModel->addBill(dto);
+    if(!m_billModel->addBill(dto))
+    {
+        m_view->showErrorMessage(m_billModel->lastError());
+        m_view->reject();
+    }
+    else
+    {
+		m_view->accept();
+    }
 }

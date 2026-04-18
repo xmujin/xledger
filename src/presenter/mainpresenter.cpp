@@ -8,17 +8,15 @@
  * 
  */
 #include "mainpresenter.h"
-#include "CategoryModel.h"
-#include "TagModel.h"
 #include "addbillpresenter.h"
 #include "addcategorytagpresenter.h"
-#include "billmodel.h"
+#include "ibillmodel.h"
 #include "filterstate.h"
 #include "imainview.h"
 #include <QDialog>
 
 
-MainPresenter::MainPresenter(BillModel *model, IMainView *view, QObject* parent)
+MainPresenter::MainPresenter(IBillModel *model, IMainView *view, QObject* parent)
     : QObject{ parent }, m_model{ model }, m_view{ view }
 {
     initModel();
@@ -40,13 +38,13 @@ void MainPresenter::onAddBillBtnClicked() {
         // 刷新数据
         m_model->loadData();
     }
+    // 添加账单按钮reject不处理
 }
 
 void MainPresenter::onAddCategoryTagTriggered()
 {
-    if (m_view->showAddCategoryTagWindow() == QDialog::Accepted)
-    {
-    }
+    m_view->showAddCategoryTagWindow();
+    // showAddCategoryTagWindow会返回dialog的accept和reject状态 这里不处理
 }
 
 void MainPresenter::applyFilter()

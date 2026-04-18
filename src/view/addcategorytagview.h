@@ -26,11 +26,18 @@ class AddCategoryTagView: public QDialog, public IAddView
     Q_OBJECT
 
 public:
+    enum UserData {
+		IdRole = Qt::UserRole + 1,
+		BackUpRole
+    };
+
+
     explicit AddCategoryTagView(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-
-
     void setCategory(QList<CategoryDto> categories) override;
     void setTag(QList<TagDto> tags) override;
+    QWidget* widget() override { return this; }
+
+
 
 signals:
     void addCategoryRequest(const QString &category);

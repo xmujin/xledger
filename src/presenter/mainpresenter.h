@@ -13,14 +13,14 @@
 
 
 class IMainView;
-class BillModel;
+class IBillModel;
 class AddCategoryTagView;
 class MainPresenter : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MainPresenter(BillModel *model, IMainView* view, QObject *parent = nullptr);
+    explicit MainPresenter(IBillModel *model, IMainView* view, QObject *parent = nullptr);
 
 
     void initModel();
@@ -33,5 +33,5 @@ public slots:
 private:
     IMainView *m_view;
 	AddCategoryTagView* m_addCategoryTagView;
-    BillModel *m_model;
+    IBillModel *m_model;
 };

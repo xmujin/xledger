@@ -8,21 +8,22 @@
  * 
  */
 #pragma once
+#include "itagmodel.h"
 #include "tagdto.h"
 #include <QObject>
 
 
-class TagModel : public QObject {
+class TagModel : public QObject, public ITagModel
+{
   Q_OBJECT
 
 public:
-  explicit TagModel(QObject *parent = nullptr);
+	explicit TagModel(QObject *parent = nullptr);
 
-  bool addTag(const QString &tag);
-  bool updateTag(int id, const QString &name);
-  bool deleteTag(int id);
-
-  QList<TagDto> getTags();
-
+	bool addTag(const QString &tag) override;
+	bool updateTag(int id, const QString &name) override;
+	bool deleteTag(int id) override;
+	bool isExist(const QString& tag) override;
+	QList<TagDto> getTags() override;
 signals:
 };

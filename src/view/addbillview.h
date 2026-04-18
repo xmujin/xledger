@@ -30,6 +30,9 @@ public:
 
     void setCategory(QList<CategoryDto> categories) override;
     void setTag(QList<TagDto> tags) override;
+    QWidget* widget() override { return this; }
+    void accept() override { QDialog::accept(); } 
+    void reject() override { QDialog::reject(); }
 
 public slots:
     void onSubmit();

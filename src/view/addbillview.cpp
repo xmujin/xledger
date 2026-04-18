@@ -37,13 +37,28 @@ AddBillView::AddBillView(QWidget *parent, Qt::WindowFlags f)
 
 void AddBillView::onSubmit()
 {
+    if (ui->moneyLineEdit->text().isEmpty())
+    {
+        showErrorMessage("请输入金额!");
+        return;
+    }
+    bool ok;
+    double money = ui->moneyLineEdit->text().toDouble(&ok);
+	
+    if (!ok)
+    {
+        showErrorMessage("非法输入!");
+        ui->moneyLineEdit->clear();
+        return;
+    }
+
     // 分类
     int category = ui->categoryComboBox->currentData().toInt();
     int tag = ui->tagComboBox->currentData().toInt();
     
     BillDto dto;
     dto.date = QDate::currentDate().toString("yyyy-MM-dd");
-    dto.amount = ui->moneyLineEdit->text().toDouble();
+    dto.amount = money;
     dto.category_id = category;
     dto.note = ui->notePlainTextEdit->toPlainText();
     dto.type = ui->typeComboBox->currentText();
@@ -51,7 +66,6 @@ void AddBillView::onSubmit()
     dto.tag_id = tag;
 
     emit addBillClicked(dto);
-    this->accept();
 }
 
 void AddBillView::setCategory(QList<CategoryDto> categories)

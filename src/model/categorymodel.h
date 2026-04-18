@@ -9,47 +9,28 @@
  */
 #pragma once
 #include <QObject>
+#include <QString>
 #include "categorydto.h"
+#include "icategorymodel.h"
 
 struct CategoryDto;
-class CategoryModel: public QObject
+class CategoryModel: public QObject, public ICategoryModel
 {
     Q_OBJECT
 
 public:
     explicit CategoryModel(QObject *parent = nullptr);
 
-    /**
-     * @brief 从数据库中获取分类列表
-     * @return QList<CategoryDto> 
-     */
-    QList<CategoryDto> getCategories();
 
-    /**
-     * @brief 添加分类
-     * @param category 
-     * @return true 
-     * @return false 
-     */
-    bool addCategory(const QString &category);
+    QList<CategoryDto> getCategories() override;
+
+    bool addCategory(const QString &category) override;
     
-    /**
-     * @brief 更新分类
-     * @param id 分类id
-     * @param name 分类名
-     * @return true 
-     * @return false 
-     */
-    bool updateCategory(int id, const QString &name);
-    
-    /**
-     * @brief 删除分类
-     * @param id 分类的id
-     * @return true 
-     * @return false 
-     */
-    bool deleteCategory(int id);
+    bool updateCategory(int id, const QString &name) override;
+   
+    bool deleteCategory(int id) override;
 
-
-    signals:
+    bool isExist(const QString& category) override;
+private:
+    QString m_lastError;
 };

@@ -1,3 +1,4 @@
+#include "categorymodel.h"
 /**
  * @file categorymodel.cpp
  * @author xiangxun
@@ -7,9 +8,10 @@
  * @copyright Copyright (c) 2026
  * 
  */
-#include "CategoryModel.h"
-#include "dtos/categorydto.h"
+
+#include "categorydto.h"
 #include <QSqlQuery>
+#include <QSqlError>
 
 
 CategoryModel::CategoryModel(QObject *parent)
@@ -38,8 +40,12 @@ bool CategoryModel::addCategory(const QString &category)
     query.prepare("INSERT INTO category (name) "
                   "VALUES (?)");
     query.addBindValue(category);
-    query.exec();
-    return true;
+    bool success = query.exec();
+    if(!success)
+    {
+        m_lastError = query.lastError().text();
+	}
+    return success;
 }
 
 
@@ -60,5 +66,16 @@ bool CategoryModel::deleteCategory(int id)
     query.prepare("DELETE FROM category WHERE id = ?");
     query.addBindValue(id);
     query.exec();
+    return false;
+}
+
+bool CategoryModel::isExist(const QString& category)
+{
+    QSqlQuery query;
+    query.exec(QString("SELECT id FROM category WHERE name = '%1'").arg(category));
+    if (query.next())
+    {
+        return true;
+    }
     return false;
 }

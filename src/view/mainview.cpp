@@ -42,8 +42,6 @@ MainView::MainView(QWidget *parent)
 
     // 连接关于
     connect(ui->actionabout, &QAction::triggered, this, [this] {
- 
-
         QMessageBox msgBox(this);
         msgBox.setText("<div>"
                     "<h2 style='color:#3498db;'>XLedger</h2>"

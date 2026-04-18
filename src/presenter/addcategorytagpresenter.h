@@ -10,15 +10,15 @@
 #pragma once
 #include <QObject>
 
-class CategoryModel;
-class TagModel;
+class ICategoryModel;
+class ITagModel;
 class IAddView;
 class AddCategoryTagPresenter: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AddCategoryTagPresenter(CategoryModel *m_categoryModel, TagModel *m_tagModel, IAddView *m_view, QObject *parent = nullptr);
+    explicit AddCategoryTagPresenter(ICategoryModel *m_categoryModel, ITagModel *m_tagModel, IAddView *m_view, QObject *parent = nullptr);
 
 
 
@@ -33,7 +33,7 @@ public slots:
 
 
 private:
-    CategoryModel *m_categoryModel;
-    TagModel *m_tagModel;
+    ICategoryModel *m_categoryModel;
+    ITagModel *m_tagModel;
     IAddView *m_view;
 };
