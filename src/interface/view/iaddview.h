@@ -12,6 +12,12 @@
 class IAddView
 {
 public:
+	enum Type {
+		Category,
+		Tag,
+		Bill
+	};
+
 	virtual void setCategory(QList<CategoryDto> categories) = 0;
 	virtual void setTag(QList<TagDto> tags) = 0;
 	virtual QWidget* widget() = 0;
@@ -19,6 +25,8 @@ public:
 	{
 		QMessageBox::warning(widget(), "提示", message);
 	}
+	virtual void resetName(int id, Type t) {};
+
 	virtual void accept() {}
 	virtual void reject() {}
 };

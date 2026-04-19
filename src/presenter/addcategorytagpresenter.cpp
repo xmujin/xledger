@@ -39,6 +39,7 @@ void AddCategoryTagPresenter::onAddCategoryRequest(const QString& category)
 
 void AddCategoryTagPresenter::onAddTagRequest(const QString& tag)
 {
+    
     if (m_tagModel->isExist(tag))
     {
         m_view->showErrorMessage("标签已存在");
@@ -50,12 +51,24 @@ void AddCategoryTagPresenter::onAddTagRequest(const QString& tag)
 
 void AddCategoryTagPresenter::onUpdateCategoryRequest(int id, const QString& name)
 {
+    if (m_categoryModel->isExist(name))
+    {
+        m_view->showErrorMessage("分类已存在");
+        m_view->resetName(id, IAddView::Type::Category);
+        return;
+    }
     m_categoryModel->updateCategory(id, name);
     m_view->setCategory(m_categoryModel->getCategories());
 }
 
 void AddCategoryTagPresenter::onUpdateTagRequest(int id, const QString& name)
 {
+    if (m_tagModel->isExist(name))
+    {
+        m_view->showErrorMessage("标签已存在");
+
+        return;
+    }
     m_tagModel->updateTag(id, name);
     m_view->setTag(m_tagModel->getTags());
 }

@@ -28,6 +28,7 @@ public:
 public slots:
     void onAddBillBtnClicked();
     void onAddCategoryTagTriggered();
+    void onExportToExcelRequest(const QString& fileName);
     void applyFilter();
 
 private:

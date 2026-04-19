@@ -47,6 +47,4 @@ private:
     QSqlRelationalTableModel* m_model;
 	QString m_lastError;
   
-
-
 };

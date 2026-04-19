@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     QObject::connect(&w, &MainView::addBillBtnClicked, &mp, &MainPresenter::onAddBillBtnClicked);
     QObject::connect(&w, &MainView::addCategoryTagTriggered, &mp, &MainPresenter::onAddCategoryTagTriggered);
     QObject::connect(&w, &MainView::filterChanged, &mp, &MainPresenter::applyFilter);
+    QObject::connect(&w, &MainView::exportToExcelRequest, &mp, &MainPresenter::onExportToExcelRequest);
+
     w.show();
     return a.exec();
 }

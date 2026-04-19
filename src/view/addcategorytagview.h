@@ -31,12 +31,14 @@ public:
 		BackUpRole
     };
 
+    
+
 
     explicit AddCategoryTagView(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     void setCategory(QList<CategoryDto> categories) override;
     void setTag(QList<TagDto> tags) override;
     QWidget* widget() override { return this; }
-
+    void resetName(int id, Type t) override;
 
 
 signals:

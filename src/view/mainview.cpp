@@ -19,6 +19,8 @@
 #include <addbillpresenter.h>
 #include <QMessageBox>
 #include "addbillview.h"
+#include <QFileDialog>
+#include <QStandardPaths>
 
 MainView::MainView(QWidget *parent)
     : QMainWindow{parent}
@@ -79,6 +81,8 @@ MainView::MainView(QWidget *parent)
     connect(ui->startDate, &QDateEdit::userDateChanged, this, &MainView::filterChanged);
     connect(ui->endDate, &QDateEdit::userDateChanged, this, &MainView::filterChanged);
     
+    // 连接导出excel的菜单项目
+    connect(ui->actionexport, &QAction::triggered, this, &MainView::showFileDiaglog);
 
 }
 
@@ -115,7 +119,6 @@ int MainView::showAddCategoryTagWindow()
     // 删除选中的标签和分类
     connect(&view, &AddCategoryTagView::deleteCategoryRequest, &presenter, &AddCategoryTagPresenter::onDeleteCategoryRequest);
     connect(&view, &AddCategoryTagView::deleteTagRequest, &presenter, &AddCategoryTagPresenter::onDeleteTagRequest);
-    
     return view.exec();
 }
 
@@ -129,4 +132,16 @@ int MainView::showAddBillWindow()
     connect(&view, &AddBillView::addBillClicked, &presenter, &AddBillPresenter::onSubmitRequest);
 
     return view.exec();
+}
+
+void MainView::showFileDiaglog()
+{
+
+    // 获取系统的“文档”文件夹路径
+    QString docPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("另存为"),
+        docPath + "/untitled.csv",
+        tr("CSV (*.csv)"));
+    emit exportToExcelRequest(fileName);
 }

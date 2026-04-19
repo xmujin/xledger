@@ -44,7 +44,6 @@ void AddBillView::onSubmit()
     }
     bool ok;
     double money = ui->moneyLineEdit->text().toDouble(&ok);
-	
     if (!ok)
     {
         showErrorMessage("非法输入!");
@@ -52,12 +51,13 @@ void AddBillView::onSubmit()
         return;
     }
 
+
     // 分类
     int category = ui->categoryComboBox->currentData().toInt();
     int tag = ui->tagComboBox->currentData().toInt();
     
     BillDto dto;
-    dto.date = QDate::currentDate().toString("yyyy-MM-dd");
+    //dto.date = QDate::currentDate().toString("yyyy-MM-dd");
     dto.amount = money;
     dto.category_id = category;
     dto.note = ui->notePlainTextEdit->toPlainText();

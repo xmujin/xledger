@@ -5,11 +5,7 @@ project(XLedger VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
-
-
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
@@ -31,6 +27,7 @@ qt_standard_project_setup()
 
 file(GLOB XLEDGER_CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/model/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/model/service/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/presenter/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/database/*.cpp
 
@@ -46,6 +43,7 @@ qt_add_library(xledger_core STATIC ${XLEDGER_CORE_SOURCES})
 
 target_include_directories(xledger_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/model
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/model/service
     ${CMAKE_CURRENT_SOURCE_DIR}/src/model/dtos
     ${CMAKE_CURRENT_SOURCE_DIR}/src/presenter
     ${CMAKE_CURRENT_SOURCE_DIR}/src/database

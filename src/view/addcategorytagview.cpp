@@ -57,7 +57,6 @@ AddCategoryTagView::AddCategoryTagView(QWidget *parent, Qt::WindowFlags f)
 		if (item->text().isEmpty())
         {
 			showErrorMessage("分类名称不能为空");
-
             // 恢复原来的分类名
 			item->setText(item->data(UserData::BackUpRole).toString());
             return;
@@ -119,6 +118,24 @@ void AddCategoryTagView::setTag(QList<TagDto> tags)
         item->setData(tag.id, UserData::IdRole);
         item->setData(tag.name, UserData::BackUpRole);
         m_tagModel->appendRow(item);
+    }
+}
+
+void AddCategoryTagView::resetName(int id, Type t)
+{
+    QStandardItemModel* model =
+        (t == Type::Tag) ? m_tagModel : m_categoryModel;
+
+    for (int i = 0; i < model->rowCount(); ++i)
+    {
+        auto item = model->item(i);
+
+        if (item->data(UserData::IdRole).toInt() == id)
+        {
+            QSignalBlocker blocker(model);
+            item->setText(item->data(UserData::BackUpRole).toString());
+            return;
+        }
     }
 }
 

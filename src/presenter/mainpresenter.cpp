@@ -14,7 +14,7 @@
 #include "filterstate.h"
 #include "imainview.h"
 #include <QDialog>
-
+#include "fileexportservice.h"
 
 MainPresenter::MainPresenter(IBillModel *model, IMainView *view, QObject* parent)
     : QObject{ parent }, m_model{ model }, m_view{ view }
@@ -103,4 +103,13 @@ void MainPresenter::applyFilter()
     }
     QString filterStr = filters.join(" AND ");
     m_model->setFilter(filterStr);
+}
+
+
+void MainPresenter::onExportToExcelRequest(const QString& fileName)
+{
+	FileExportService::exportToCsv(m_model->model(), fileName);
+
+
+
 }

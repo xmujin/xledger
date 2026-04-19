@@ -30,10 +30,14 @@ public:
     int showAddCategoryTagWindow() override;
     int showAddBillWindow() override;
 
+private slots:
+    void showFileDiaglog();
+
 signals:
     void addBillBtnClicked();
     void addCategoryTagTriggered();
     void filterChanged();
+	void exportToExcelRequest(const QString& fileName);
 private:
     Ui::MainView *ui;
 };

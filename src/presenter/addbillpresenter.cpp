@@ -13,7 +13,7 @@
 #include "icategorymodel.h"
 #include "itagmodel.h"
 #include "iaddview.h"
-
+#include <QDate>
 
 
 AddBillPresenter::AddBillPresenter(IBillModel *billModel, ICategoryModel *categoryModel, ITagModel *tagModel, IAddView *addBillView, QObject *parent)
@@ -30,7 +30,14 @@ AddBillPresenter::AddBillPresenter(IBillModel *billModel, ICategoryModel *catego
 
 void AddBillPresenter::onSubmitRequest(BillDto dto)
 {
+	if (dto.amount <= 0)
+    {
+        m_view->showErrorMessage("金额必须大于0!");
+        return;
+    }
 
+    // 日期添加
+    dto.date = QDate::currentDate().toString("yyyy-MM-dd");
 
     // TODO 提交添加账单的逻辑
     if(!m_billModel->addBill(dto))
