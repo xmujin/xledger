@@ -12,11 +12,11 @@
 #include <QSqlQuery>
 #include <QSqlRelationalTableModel>
 #include <QSqlError>
-
+#include <mysqlrelationaltablemodel.h>
 
 BillModel::BillModel( QObject* parent)
     : QObject{parent}
-    , m_model{ new QSqlRelationalTableModel }
+    , m_model{ new MySqlRelationalTableModel }
 {
     initModel();
 }
@@ -26,7 +26,7 @@ BillModel::BillModel( QObject* parent)
 void BillModel::initModel()
 {
     m_model->setTable("bill"); 
-    m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    m_model->setEditStrategy(QSqlTableModel::OnFieldChange);
     // 设置外键关系
     m_model->setRelation(4, QSqlRelation("category", "id", "name"));
     m_model->setRelation(6, QSqlRelation("tag", "id", "name"));

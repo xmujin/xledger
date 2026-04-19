@@ -1,9 +1,10 @@
 #pragma once
+
 #include <QObject>
 #include "ibillmodel.h"
 
 struct BillDto;
-class QSqlRelationalTableModel;
+class MySqlRelationalTableModel;
 class QAbstractItemModel;
 class BillModel : public QObject, public IBillModel
 {
@@ -44,7 +45,7 @@ public:
 
 	QString lastError() const override { return m_lastError; }
 private:
-    QSqlRelationalTableModel* m_model;
+    MySqlRelationalTableModel *m_model;
 	QString m_lastError;
   
 };

@@ -9,7 +9,7 @@
  */
 
 #include "mysqlrelationaltablemodel.h"
-
+#include <QDate>
 
 
 QVariant MySqlRelationalTableModel::data(const QModelIndex &idx, int role) const
@@ -19,6 +19,16 @@ QVariant MySqlRelationalTableModel::data(const QModelIndex &idx, int role) const
     {
         return {};
 
+    }
+
+    //2026 - 04 - 19
+    // 改为年月日 
+    if (role == Qt::DisplayRole && idx.column() == 1)
+    {
+
+        QDate date = QDate::fromString(value.toString(), "yyyy-MM-dd");
+        QString result = date.toString("yyyy年M月d日");
+        return result;
     }
 
 

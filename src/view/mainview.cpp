@@ -92,6 +92,7 @@ void MainView::setModel(QAbstractItemModel *model)
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->setModel(model);
     ui->tableView->hideColumn(0); 
+    // 设置账单model的代理
     ui->tableView->setItemDelegate(new MySqlRelationalDelegate(ui->tableView));
 }
 
