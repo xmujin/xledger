@@ -39,8 +39,12 @@ cd XLedger
 ```
 ### 2. 执行构建
 ```bash
+# 打开Developer Command Prompt for VS
 mkdir build
 cd build
-cmake ..
-make
+cmake .. -DCMAKE_PREFIX_PATH="to_your_qt_install_path"
+cmake --build . --config Release
+cmake --install . 
+# 安装路径默认在源码目录的dist文件夹，可以通过 -DCMAKE_INSTALL_PREFIX=your_path 来指定安装路径
 ```
+

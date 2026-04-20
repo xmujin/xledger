@@ -9,7 +9,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
+option(BUILD_TEST "Build tests" OFF)
 
+# 设置安装前缀
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/dist")
 
 set(app_icon_resource_windows
@@ -53,6 +55,8 @@ target_include_directories(xledger_core PUBLIC
 
 add_subdirectory(xxun-ui)
 
+
+
 target_link_libraries(xledger_core PUBLIC
     Qt::Widgets
     Qt::Core
@@ -88,14 +92,47 @@ set_target_properties(XLedger PROPERTIES
 # =========================================================
 # 3. TEST
 # =========================================================
-enable_testing()
-add_subdirectory(tests)
+
+
+
+if(BUILD_TEST)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+
+
 
 # =========================================================
 # 4. INSTALL
 # =========================================================
-include(GNUInstallDirs)
 
+include(GNUInstallDirs)
 install(TARGETS XLedger
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+
+# 生成部署脚本
+set(deploy_tool_options_arg  
+    --no-compiler-runtime 
+    --no-translations 
+    --no-opengl-sw 
+    --no-system-d3d-compiler
+    --no-system-dxc-compiler
+)
+qt_generate_deploy_app_script(
+    TARGET XLedger
+    OUTPUT_SCRIPT deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+    EXCLUDE_PLUGIN_TYPES
+        generic
+        iconengines
+        imageformats
+        styles
+    DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+)
+
+install(SCRIPT ${deploy_script})
