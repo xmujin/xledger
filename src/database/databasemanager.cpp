@@ -52,11 +52,13 @@ bool DatabaseManager::init()
                 paytype TEXT NOT NULL,
                 tag_id INTEGER,
                 note TEXT,
+
                 FOREIGN KEY (category_id) REFERENCES category(id)
-                ON DELETE CASCADE
+                ON DELETE SET NULL
                 ON UPDATE CASCADE,
+
                 FOREIGN KEY (tag_id) REFERENCES tag(id)
-                ON DELETE CASCADE
+                ON DELETE SET NULL
                 ON UPDATE CASCADE
             );)");
         

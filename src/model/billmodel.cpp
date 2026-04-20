@@ -46,6 +46,10 @@ void BillModel::initModel()
 void BillModel::loadData()
 {
     m_model->select();
+	QSqlTableModel* categoryModel = m_model->relationModel(4);
+    QSqlTableModel* tagModel = m_model->relationModel(6);
+	categoryModel->select();
+	tagModel->select();
 }
 
 void BillModel::setFilter(const QString &filter)

@@ -30,9 +30,10 @@ public slots:
     void onAddCategoryTagTriggered();
     void onExportToExcelRequest(const QString& fileName);
     void applyFilter();
+    void onCategoryOrTagUpdated();
 
 private:
     IMainView *m_view;
-	AddCategoryTagView* m_addCategoryTagView;
+	AddCategoryTagView *m_addCategoryTagView;
     IBillModel *m_model;
 };

@@ -30,7 +30,8 @@ public slots:
     void onUpdateTagRequest(int id, const QString& name);
     void onDeleteCategoryRequest(int id);
     void onDeleteTagRequest(int id);
-
+signals:
+	void categoryOrTagUpdated();
 
 private:
     ICategoryModel *m_categoryModel;

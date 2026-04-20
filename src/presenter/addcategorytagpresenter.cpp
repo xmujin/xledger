@@ -34,6 +34,7 @@ void AddCategoryTagPresenter::onAddCategoryRequest(const QString& category)
 
     m_categoryModel->addCategory(category);
     m_view->setCategory(m_categoryModel->getCategories());
+    emit categoryOrTagUpdated();
 }
 
 
@@ -47,6 +48,7 @@ void AddCategoryTagPresenter::onAddTagRequest(const QString& tag)
     }
     m_tagModel->addTag(tag);
     m_view->setTag(m_tagModel->getTags());
+    emit categoryOrTagUpdated();
 }
 
 void AddCategoryTagPresenter::onUpdateCategoryRequest(int id, const QString& name)
@@ -59,6 +61,7 @@ void AddCategoryTagPresenter::onUpdateCategoryRequest(int id, const QString& nam
     }
     m_categoryModel->updateCategory(id, name);
     m_view->setCategory(m_categoryModel->getCategories());
+    emit categoryOrTagUpdated();
 }
 
 void AddCategoryTagPresenter::onUpdateTagRequest(int id, const QString& name)
@@ -71,16 +74,26 @@ void AddCategoryTagPresenter::onUpdateTagRequest(int id, const QString& name)
     }
     m_tagModel->updateTag(id, name);
     m_view->setTag(m_tagModel->getTags());
+    emit categoryOrTagUpdated();
 }
+
+
+
+
 
 void AddCategoryTagPresenter::onDeleteCategoryRequest(int id)
 {
     m_categoryModel->deleteCategory(id);
     m_view->setCategory(m_categoryModel->getCategories());
+
+	// 发送分类删除的信号，通知账单列表刷新
+	emit categoryOrTagUpdated();
 }
 
 void AddCategoryTagPresenter::onDeleteTagRequest(int id)
 {
     m_tagModel->deleteTag(id);
     m_view->setTag(m_tagModel->getTags());
+    // 发送标签删除的信号，通知账单列表刷新
+    emit categoryOrTagUpdated();
 }

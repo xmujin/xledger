@@ -18,6 +18,7 @@ namespace Ui {
 }
 class QAbstractItemModel;
 struct FilterState;
+class MainPresenter;
 class MainView : public QMainWindow, public IMainView
 {
     Q_OBJECT
@@ -27,7 +28,7 @@ public:
 
     void setModel(QAbstractItemModel *model) override;
     FilterState getFilterState() override;
-    int showAddCategoryTagWindow() override;
+    int showAddCategoryTagWindow(MainPresenter* mainPresenter) override;
     int showAddBillWindow() override;
 
 private slots:

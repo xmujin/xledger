@@ -39,7 +39,7 @@ void AddBillPresenter::onSubmitRequest(BillDto dto)
     // 日期添加
     dto.date = QDate::currentDate().toString("yyyy-MM-dd");
 
-    // TODO 提交添加账单的逻辑
+    // 提交添加账单的逻辑
     if(!m_billModel->addBill(dto))
     {
         m_view->showErrorMessage(m_billModel->lastError());

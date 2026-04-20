@@ -41,9 +41,12 @@ void MainPresenter::onAddBillBtnClicked() {
     // 添加账单按钮reject不处理
 }
 
+// 调用对话框处理添加分类和标签的逻辑
 void MainPresenter::onAddCategoryTagTriggered()
 {
-    m_view->showAddCategoryTagWindow();
+    m_view->showAddCategoryTagWindow(this);
+
+
     // showAddCategoryTagWindow会返回dialog的accept和reject状态 这里不处理
 }
 
@@ -109,7 +112,11 @@ void MainPresenter::applyFilter()
 void MainPresenter::onExportToExcelRequest(const QString& fileName)
 {
 	FileExportService::exportToCsv(m_model->model(), fileName);
+}
 
+void MainPresenter::onCategoryOrTagUpdated()
+{
 
-
+	// TODO 添加关联表下拉框数据更新的逻辑
+    m_model->loadData();
 }

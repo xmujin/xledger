@@ -21,6 +21,7 @@
 #include "addbillview.h"
 #include <QFileDialog>
 #include <QStandardPaths>
+#include "mainpresenter.h"
 
 MainView::MainView(QWidget *parent)
     : QMainWindow{parent}
@@ -107,7 +108,7 @@ FilterState MainView::getFilterState()
 }
 
 
-int MainView::showAddCategoryTagWindow()
+int MainView::showAddCategoryTagWindow(MainPresenter *mainPresenter)
 {
     TagModel tagModel;
     CategoryModel categoryModel;
@@ -120,6 +121,10 @@ int MainView::showAddCategoryTagWindow()
     // 删除选中的标签和分类
     connect(&view, &AddCategoryTagView::deleteCategoryRequest, &presenter, &AddCategoryTagPresenter::onDeleteCategoryRequest);
     connect(&view, &AddCategoryTagView::deleteTagRequest, &presenter, &AddCategoryTagPresenter::onDeleteTagRequest);
+    
+	// 当子presenter发出分类或标签更新的信号时，通知主界面刷新账单列表
+    connect(&presenter, &AddCategoryTagPresenter::categoryOrTagUpdated, mainPresenter, &MainPresenter::onCategoryOrTagUpdated);
+    
     return view.exec();
 }
 
